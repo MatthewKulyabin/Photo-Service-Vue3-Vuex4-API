@@ -6,7 +6,8 @@ import {
   postPhoto,
   getData,
   inLocalStorage,
-  outLocalStorage
+  outLocalStorage,
+  changePhoto
 } from '../pureFunctions';
 
 const URL = 'http://u104386.test-handyhost.ru/api';
@@ -78,6 +79,14 @@ export const store = createStore({
     async addPhoto(store, payload) {
       console.log(payload);
       postPhoto(`${URL}/photo`, store.state.token, {
+        payload
+      }).then(data => {
+        console.log(data);
+      });
+    },
+    async changePhoto(store, payload) {
+      console.log(payload);
+      changePhoto(`${URL}/photo/${payload.id}`, store.state.token, {
         payload
       }).then(data => {
         console.log(data);

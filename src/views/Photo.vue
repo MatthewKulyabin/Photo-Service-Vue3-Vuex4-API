@@ -8,7 +8,7 @@
           v-for="photo in arr"
           v-bind:key="photo.id"
           :style="photoStyle(photo)"
-          @click="goToDetail"
+          @click="goToDetail(photo)"
         ></div>
       </div>
     </ul>
@@ -37,8 +37,11 @@ export default {
         height: "100px"
       };
     },
-    goToDetail(id) {
-      this.$router.push({ path: `/photo/1` });
+    goToDetail(photo) {
+      this.$router.push({
+        name: "PhotoDetail",
+        params: { photo: JSON.stringify(photo) }
+      });
     }
   }
 };

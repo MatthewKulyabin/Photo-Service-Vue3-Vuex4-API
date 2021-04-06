@@ -31,6 +31,18 @@ export const getData = async (url = '', token) => {
   return response.json();
 };
 
+export const changePhoto = async (url = '', token, payload) => {
+  console.log(url);
+  console.log(token);
+  console.log(payload);
+  body._method = 'patch';
+  body.name = payload.name;
+  body.photo = payload.photo;
+  const response = await fetch(url, {
+    method: 'POST'
+  });
+};
+
 export const inLocalStorage = (name, data = null) => {
   if (localStorage.getItem(name)) {
     console.log(localStorage.getItem(name));

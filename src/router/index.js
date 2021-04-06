@@ -38,8 +38,12 @@ const routes = [
   {
     path: '/photo',
     name: 'Photo',
-    component: Photo,
-    children: [{ path: ':id', component: PhotoDetail }]
+    component: Photo
+  },
+  {
+    path: '/photo/detail',
+    name: 'PhotoDetail',
+    component: PhotoDetail
   },
   {
     path: '/user',

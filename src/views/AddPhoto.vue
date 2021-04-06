@@ -1,9 +1,7 @@
 <template>
   <div>
     <br />
-    <form ref="formElem">
-      <input type="file" ref="fileInput" @change="addPhotoHandler" />
-    </form>
+    <input type="file" ref="fileInput" @change="addPhotoHandler" />
   </div>
 </template>
 
