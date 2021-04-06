@@ -1,8 +1,9 @@
 <template>
   <div>
     <br />
-    <div @click="selectImage">YOBA</div>
-    <input type="file" ref="fileInput" @change="pickFile" />
+    <form ref="formElem">
+      <input type="file" ref="fileInput" @change="addPhotoHandler" />
+    </form>
   </div>
 </template>
 
@@ -11,36 +12,25 @@ export default {
   name: 'AddPhoto',
   data() {
     return {
-      file: ''
+      file: '',
     };
   },
   methods: {
-    selectImage() {
-      this.$refs.fileInput.click();
+    async addPhotoHandler(e) {
+      const photo = this.$refs.formElem;
+      // console.log(this.$refs.formElem);
+      // const newPhoto = await toBase64(photo).then((data) => data);
+      this.$store.dispatch('addPhoto', { photo: photo });
     },
-    pickFile() {
-      const input = this.$refs.fileInput;
-      const file = input.files;
-      if (file && file[0]) {
-        const reader = new FileReader();
-        reader.onload = e => {
-          this.file = e.target.result;
-        };
-        reader.readAsDataURL(file[0]);
-        this.$emit('input', file[0]);
-        console.log(this.file);
-        // this.$store.dispatch('addPhoto', { photo: this.file });
-      }
-    }
-    // addPhotoHandler(e) {
-    //   const photo = e.target.files[0];
-    //   const fd = new FormData();
-    //   fd.append('image', photo, photo.name);
-    //   console.log(fd);
-    //   this.$store.dispatch('addPhoto');
-    // }
-  }
+  },
 };
+const toBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 </script>
 
 <style></style>

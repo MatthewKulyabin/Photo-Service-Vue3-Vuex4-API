@@ -2,26 +2,25 @@ export const random = (min, max) => {
   return Math.floor(min + Math.random() * (max + 1 - min));
 };
 
-export const postData = async (url = '', data = {}) => {
-  if (!data.token) {
-    data.token = '';
+export const postData = async (url = '', headers = {}, data = {}) => {
+  let body = null;
+  if (headers['Content-type'] === 'FormData') {
+    console.log(data.payload.photo);
+    const newPhoto = new FormData(data.payload.photo);
+    body = { photo: newPhoto };
+  } else if (headers['Content-type'] === 'application/json') {
+    body = JSON.stringify(data.payload);
   }
-  if (!data.contentType) {
-    data.contentType = 'application/json';
-  }
-  console.log(data);
+  console.log(body);
   const response = await fetch(url, {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
     credentials: 'same-origin',
-    headers: {
-      Authorization: 'Bearer ' + data.token,
-      'Content-type': data.contentType
-    },
+    headers,
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-    body: JSON.stringify(data)
+    body,
   });
   return response.json();
 };
