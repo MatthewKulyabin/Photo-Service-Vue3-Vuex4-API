@@ -4,7 +4,8 @@
     <router-link to="/signup">Registration</router-link>
     <router-link to="/login">Login</router-link>
     <router-link to="/logout">Logout</router-link>
-    <router-link to="/photo">Add Photo</router-link>
+    <router-link to="/add_photo">Add Photo</router-link>
+    <router-link to="/photo">Photo</router-link>
     <router-link to="/user">User</router-link>
   </div>
   <router-view />

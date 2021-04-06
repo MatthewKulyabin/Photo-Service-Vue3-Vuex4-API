@@ -1,23 +1,30 @@
 import { createApp } from 'vue';
 import { createStore } from 'vuex';
 
-import { postData } from '../pureFunctions';
+import {
+  postData,
+  postPhoto,
+  getData,
+  inLocalStorage,
+  outLocalStorage
+} from '../pureFunctions';
 
 const URL = 'http://u104386.test-handyhost.ru/api';
 
 export const store = createStore({
-  data() {
-    return {};
-  },
   state() {
     return {
-      token: '',
+      token: inLocalStorage('username') || '',
+      photos: []
     };
   },
   getters: {
     username(state) {
       return state.username;
     },
+    photos(state) {
+      return state.photos;
+    }
   },
   mutations: {
     saveUsername(state, payload) {
@@ -25,6 +32,17 @@ export const store = createStore({
       state.result.username = state.username;
       return true;
     },
+    saveToken(state, payload) {
+      state.token = payload.token;
+      inLocalStorage('username', payload.token);
+    },
+    deleteToken(state) {
+      state.token = '';
+      outLocalStorage('username');
+    },
+    savePhotos(state, payload) {
+      state.photos.push(payload);
+    }
   },
   actions: {
     async signup(store, payload) {
@@ -33,7 +51,7 @@ export const store = createStore({
         `${URL}/signup`,
         { 'Content-type': 'application/json' },
         { payload }
-      ).then((data) => {
+      ).then(data => {
         console.log(data);
       });
     },
@@ -43,33 +61,33 @@ export const store = createStore({
         `${URL}/login`,
         { 'Content-type': 'application/json' },
         { payload }
-      ).then((data) => {
+      ).then(data => {
         console.log(data.token);
-        store.state.token = data.token;
+        store.commit('saveToken', data);
       });
     },
     async logout(store) {
       console.log(store.state.token);
       postData(`${URL}/logout`, {
-        Authorization: 'Bearer ' + store.state.token,
-      }).then((data) => {
+        Authorization: 'Bearer ' + store.state.token
+      }).then(data => {
         console.log(data);
+        store.commit('deleteToken');
       });
     },
     async addPhoto(store, payload) {
       console.log(payload);
-      postData(
-        `${URL}/photo`,
-        {
-          'Content-type': 'FormData',
-          Authorization: 'Bearer ' + store.state.token,
-        },
-        {
-          payload,
-        }
-      ).then((data) => {
+      postPhoto(`${URL}/photo`, store.state.token, {
+        payload
+      }).then(data => {
         console.log(data);
       });
     },
-  },
+    async getPhoto(store) {
+      getData(`${URL}/photo`, store.state.token).then(data => {
+        console.log(data);
+        store.commit('savePhotos', data);
+      });
+    }
+  }
 });

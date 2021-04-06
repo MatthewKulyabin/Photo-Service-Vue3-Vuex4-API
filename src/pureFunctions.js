@@ -1,30 +1,44 @@
-export const random = (min, max) => {
-  return Math.floor(min + Math.random() * (max + 1 - min));
-};
-
 export const postData = async (url = '', headers = {}, data = {}) => {
-  let body = null;
-  if (headers['Content-type'] === 'FormData') {
-    console.log(data.payload.photo);
-    const newPhoto = new FormData(data.payload.photo);
-    body = { photo: newPhoto };
-  } else if (headers['Content-type'] === 'application/json') {
-    body = JSON.stringify(data.payload);
-  }
-  console.log(body);
+  const body = JSON.stringify(data.payload);
   const response = await fetch(url, {
     method: 'POST',
-    mode: 'cors',
-    cache: 'no-cache',
-    credentials: 'same-origin',
     headers,
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer',
-    body,
+    body
   });
   return response.json();
 };
 
-export const sortNumbers = (a, b) => {
-  return b - a;
+export const postPhoto = async (url = '', token, data = {}) => {
+  const body = data.payload.fd;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + token
+    },
+    body
+  });
+  return response.json();
+};
+
+export const getData = async (url = '', token) => {
+  console.log(token);
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + token
+    }
+  });
+  return response.json();
+};
+
+export const inLocalStorage = (name, data = null) => {
+  if (localStorage.getItem(name)) {
+    console.log(localStorage.getItem(name));
+    return localStorage.getItem(name);
+  }
+  localStorage.setItem(name, data);
+};
+
+export const outLocalStorage = name => {
+  localStorage.setItem(name, '');
 };
