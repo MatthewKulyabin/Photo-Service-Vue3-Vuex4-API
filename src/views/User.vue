@@ -1,7 +1,11 @@
 <template>
   <div>
     <br />
-    <input type="text" placeholder="Search user..." v-model="searchUserText" /><br /><br />
+    <input
+      type="text"
+      placeholder="Search user..."
+      v-model="searchUserText"
+    /><br /><br />
     <button @click="searchUserHandler">Search</button>
   </div>
 </template>
@@ -15,15 +19,13 @@ export default {
     };
   },
   methods: {
-    searchUserHandler() {
+    async searchUserHandler() {
       if (this.searchUserText) {
-        console.log(this.searchUserText);
+        await this.$store.dispatch('searchUser', { text: this.searchUserText });
       }
     },
   },
-}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

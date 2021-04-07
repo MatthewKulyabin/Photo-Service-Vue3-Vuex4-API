@@ -7,7 +7,10 @@ import {
   getData,
   inLocalStorage,
   outLocalStorage,
-  changePhoto
+  changePhoto,
+  getDetailData,
+  deleteDetailData,
+  searchData,
 } from '../pureFunctions';
 
 const URL = 'http://u104386.test-handyhost.ru/api';
@@ -16,7 +19,7 @@ export const store = createStore({
   state() {
     return {
       token: inLocalStorage('username') || '',
-      photos: []
+      photos: [],
     };
   },
   getters: {
@@ -25,7 +28,7 @@ export const store = createStore({
     },
     photos(state) {
       return state.photos;
-    }
+    },
   },
   mutations: {
     saveUsername(state, payload) {
@@ -43,7 +46,10 @@ export const store = createStore({
     },
     savePhotos(state, payload) {
       state.photos.push(payload);
-    }
+    },
+    savePhoto(state, payload) {
+      state.photo = payload;
+    },
   },
   actions: {
     async signup(store, payload) {
@@ -52,7 +58,7 @@ export const store = createStore({
         `${URL}/signup`,
         { 'Content-type': 'application/json' },
         { payload }
-      ).then(data => {
+      ).then((data) => {
         console.log(data);
       });
     },
@@ -62,7 +68,7 @@ export const store = createStore({
         `${URL}/login`,
         { 'Content-type': 'application/json' },
         { payload }
-      ).then(data => {
+      ).then((data) => {
         console.log(data.token);
         store.commit('saveToken', data);
       });
@@ -70,8 +76,8 @@ export const store = createStore({
     async logout(store) {
       console.log(store.state.token);
       postData(`${URL}/logout`, {
-        Authorization: 'Bearer ' + store.state.token
-      }).then(data => {
+        Authorization: 'Bearer ' + store.state.token,
+      }).then((data) => {
         console.log(data);
         store.commit('deleteToken');
       });
@@ -79,24 +85,55 @@ export const store = createStore({
     async addPhoto(store, payload) {
       console.log(payload);
       postPhoto(`${URL}/photo`, store.state.token, {
-        payload
-      }).then(data => {
+        payload,
+      }).then((data) => {
         console.log(data);
       });
     },
     async changePhoto(store, payload) {
       console.log(payload);
       changePhoto(`${URL}/photo/${payload.id}`, store.state.token, {
-        payload
-      }).then(data => {
+        payload,
+      }).then((data) => {
         console.log(data);
       });
     },
     async getPhoto(store) {
-      getData(`${URL}/photo`, store.state.token).then(data => {
+      let photos = [];
+      await getData(`${URL}/photo`, store.state.token).then((data) => {
         console.log(data);
-        store.commit('savePhotos', data);
+        photos.push(data);
       });
-    }
-  }
+      return photos;
+    },
+    async getDetailPhoto(store, { id }) {
+      console.log(id);
+      let detailPhoto = null;
+      await getDetailData(`${URL}/photo/${id}`, store.state.token, {
+        id,
+      }).then((data) => {
+        detailPhoto = data;
+      });
+      return detailPhoto;
+    },
+    async deleteDetailPhoto(store, { id }) {
+      console.log(id);
+      await deleteDetailData(`${URL}/photo/${id}`, store.state.token, {
+        id,
+      }).then((data) => {
+        console.log(data);
+      });
+    },
+    async searchUser(store, { text }) {
+      console.log(text);
+      const newUrl = new URL(`${URL}/user`);
+      await searchData(newUrl, store.state.token, {
+        text,
+      });
+    },
+    async shareDetailPhoto(store, { ids }) {
+      // await shareDetailData(``);
+      console.log(ids);
+    },
+  },
 });

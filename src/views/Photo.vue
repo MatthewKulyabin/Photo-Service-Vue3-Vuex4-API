@@ -4,12 +4,12 @@
     <button v-if="showed" @click="getPhotoHandler">Show photos</button>
     <ul>
       <div v-for="arr in photos" v-bind:key="arr.id">
-        <div
+        <img
           v-for="photo in arr"
           v-bind:key="photo.id"
           :style="photoStyle(photo)"
           @click="goToDetail(photo)"
-        ></div>
+        />
       </div>
     </ul>
   </div>
@@ -17,35 +17,36 @@
 
 <script>
 export default {
-  name: "Photo",
+  name: 'Photo',
   data() {
     return {
-      photos: this.$store.getters.photos,
-      showed: true
+      photos: null,
+      showed: true,
     };
   },
   methods: {
-    getPhotoHandler() {
-      this.$store.dispatch("getPhoto");
+    async getPhotoHandler() {
+      this.photos = await this.$store.dispatch('getPhoto');
+      console.log(this.photos);
     },
     photoStyle(photo) {
       this.showed = false;
       return {
-        "background-image": `url(${photo.url})`,
-        "background-size": "100px",
-        width: "100px",
-        height: "100px"
+        'background-image': `url(${photo.url})`,
+        'background-size': '100px',
+        'background-repeat': 'no-repeat',
+        width: '100px',
+        height: '100px',
       };
     },
     goToDetail(photo) {
       this.$router.push({
-        name: "PhotoDetail",
-        params: { photo: JSON.stringify(photo) }
+        name: 'PhotoDetail',
+        params: { photo: JSON.stringify(photo) },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>
