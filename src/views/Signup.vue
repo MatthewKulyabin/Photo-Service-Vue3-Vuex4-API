@@ -37,8 +37,9 @@ export default {
         this.surname &&
         this.password
       ) {
+        console.log(this.first_name, this.surname, this.phone, this.password);
         this.$store.dispatch("signup", {
-          first_name: this.firstName,
+          first_name: this.first_name,
           surname: this.surname,
           phone: this.phone,
           password: this.password

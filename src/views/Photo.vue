@@ -17,35 +17,35 @@
 
 <script>
 export default {
-  name: 'Photo',
+  name: "Photo",
   data() {
     return {
       photos: null,
-      showed: true,
+      showed: true
     };
   },
   methods: {
     async getPhotoHandler() {
-      this.photos = await this.$store.dispatch('getPhoto');
+      this.photos = await this.$store.dispatch("getPhoto");
       console.log(this.photos);
     },
     photoStyle(photo) {
       this.showed = false;
       return {
-        'background-image': `url(${photo.url})`,
-        'background-size': '100px',
-        'background-repeat': 'no-repeat',
-        width: '100px',
-        height: '100px',
+        "background-image": `url(${photo.url})`,
+        "background-size": "100px",
+        "background-repeat": "no-repeat",
+        width: "100px",
+        height: "100px"
       };
     },
     goToDetail(photo) {
       this.$router.push({
-        name: 'PhotoDetail',
-        params: { photo: JSON.stringify(photo) },
+        name: "PhotoDetail",
+        params: { photo: JSON.stringify(photo) }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

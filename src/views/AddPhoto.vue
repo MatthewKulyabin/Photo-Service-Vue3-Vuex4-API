@@ -7,17 +7,17 @@
 
 <script>
 export default {
-  name: 'AddPhoto',
+  name: "AddPhoto",
   methods: {
     async addPhotoHandler(e) {
       const photo = e.target.files[0];
       const fd = new FormData();
-      fd.append('photo', photo);
+      fd.append("photo", photo);
       console.log(photo);
-      await this.$store.dispatch('addPhoto', { fd });
-      this.$router.replace({ path: '/photo' });
-    },
-  },
+      await this.$store.dispatch("addPhoto", { fd });
+      this.$router.replace({ path: "/photo" });
+    }
+  }
 };
 </script>
 
