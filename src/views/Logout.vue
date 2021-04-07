@@ -1,15 +1,16 @@
 <template>
   <div>
+    <br />
     <button @click="logoutHandler">Log out</button>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Logout',
+  name: "Logout",
   methods: {
     logoutHandler() {
-      this.$store.dispatch('logout');
+      this.$store.dispatch("logout");
     }
   }
 };
